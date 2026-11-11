@@ -18,8 +18,8 @@ vector_db = Chroma(
 def add_document(document_id, text):
 
     splitter = RecursiveCharacterTextSplitter(
-        chunk_size=1200,
-        chunk_overlap=250
+        chunk_size=1500,
+        chunk_overlap=300
     )
 
     chunks = splitter.split_text(text)

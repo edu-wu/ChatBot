@@ -9,10 +9,9 @@ llm = OllamaLLM(
 
 
 def ask_question(question):
-
-    results = vector_db.similarity_search(
-        question,
-        k=5
+    results = vector_db.max_marginal_relevance_search(
+    question,
+    k=4
     )
 
     for i, doc in enumerate(results):
@@ -25,29 +24,28 @@ def ask_question(question):
     )
 
     prompt = f"""
-Eres un asistente que analiza documentos.
+    Eres un asistente que analiza documentos.
 
-Debes responder usando EXCLUSIVAMENTE la información
-contenida en los fragmentos entregados.
+    Responde de forma natural y profesional.
 
-Si la información aparece en varios fragmentos,
-combina la información y genera una respuesta resumida.
+    NO menciones fragmentos, chunks, contexto interno
+    ni cómo obtuviste la información.
 
-Si no encuentras suficiente información,
-responde exactamente:
+    Si la información no está disponible,
+    responde:
 
-No encontré información suficiente en los documentos.
+    "No encontré información suficiente en los documentos."
 
-Contexto:
+    Contexto:
 
-{context}
+    {context}
 
-Pregunta:
+    Pregunta:
 
-{question}
+    {question}
 
-Respuesta:
-"""
+    Respuesta:
+    """
 
     response = llm.invoke(prompt).strip()
 
